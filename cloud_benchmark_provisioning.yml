@@ -1,0 +1,48 @@
+---
+- name: Install Nginx+PHP and benchmark framework
+  hosts: webservers
+  tasks:
+  - name: update apt caches
+    apt: update_cache=yes
+    sudo: yes
+  - name: setup nginx
+    apt: name=nginx state=latest
+    sudo: yes
+  - name: create docroot
+    file: path=/var/www state=directory owner=ubuntu group=www-data mode=0775
+    sudo: yes
+  - name: setup php5-fpm
+    apt: name=php5-fpm state=latest
+    sudo: yes
+  - name: setup git
+    apt: name=git state=latest
+    sudo: yes
+  - name: configure nginx
+    copy: src=./nginx/symfony2.conf dest=/etc/nginx/sites-enabled/symfony2.conf
+    sudo: yes
+    notify: restart nginx
+  - name: create composer config dir
+    file: path=/home/ubuntu/.composer state=directory mode=0755
+  - name: add composer config for github
+    copy: src=./composer/config.json dest=/home/ubuntu/.composer/config.json
+  - name: load test framework
+    git: repo=https://github.com/TechEmpower/FrameworkBenchmarks.git dest=/home/ubuntu/fwbench force=yes
+  - name: setup symfony2 test into docroot
+    command: mv /home/ubuntu/fwbench/frameworks/PHP/symfony2 /var/www/test
+  - name: create symfony2 cache dir
+    file: path=/var/www/test/app/cache state=directory owner=ubuntu group=www-data mode=0775
+  - name: create symfony2 logs dir
+    file: path=/var/www/test/app/logs state=directory owner=ubuntu group=www-data mode=0775
+  - name: ensure nginx is running (and enable it at boot)
+    service: name=nginx state=started enabled=yes
+    sudo: yes
+  - name: ensure php5-fpm is running (and enable it at boot)
+    service: name=php5-fpm state=started enabled=yes
+    sudo: yes
+  handlers:
+    - name: restart nginx
+      service: name=nginx state=restarted
+      sudo: yes
+    - name: restart php5-fpm
+      service: name=php5-fpm state=restarted
+      sudo: yes
