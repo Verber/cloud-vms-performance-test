@@ -20,6 +20,30 @@
       - php5-fpm
       - php5-mysqlnd
     sudo: yes
+  - name: install composer
+    shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin
+    sudo: yes
+  - name: create composer link
+    file: src=/usr/local/bin/composer.phar dest=/usr/local/bin/composer state=link force=yes
+    sudo: yes
+  - name: setup git
+    apt: name=git state=latest
+    sudo: yes
+  - name: configure nginx
+    copy: src=./nginx/symfony2.conf dest=/etc/nginx/sites-enabled/symfony2.conf
+    sudo: yes
+    notify: restart nginx
+  - name: create composer config dir
+    file: path=/home/ubuntu/.composer state=directory mode=0755
+  - name: add composer config for github
+    copy: src=./composer/config.json dest=/home/ubuntu/.composer/config.json
+  - name: cleanup test source
+    command: rm -rf /home/ubuntu/fwbench
+  - name: load test framework
+    git:
+      repo=https://github.com/Verber/FrameworkBenchmarks.git
+      dest=/home/ubuntu/fwbench
+      force=yes
   - name: setup mysql server
     apt:
       name: "{{ item }}"
@@ -45,30 +69,6 @@
       password: benchmarkdbpass
       priv: hello_world.*:ALL
       state: present
-  - name: install composer
-    shell: >
-      curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin
-      cd /usr/local/bin
-      ln -s composer.phar composer
-    sudo: yes
-  - name: setup git
-    apt: name=git state=latest
-    sudo: yes
-  - name: configure nginx
-    copy: src=./nginx/symfony2.conf dest=/etc/nginx/sites-enabled/symfony2.conf
-    sudo: yes
-    notify: restart nginx
-  - name: create composer config dir
-    file: path=/home/ubuntu/.composer state=directory mode=0755
-  - name: add composer config for github
-    copy: src=./composer/config.json dest=/home/ubuntu/.composer/config.json
-  - name: cleanup test source
-    command: rm -rf /home/ubuntu/fwbench
-  - name: load test framework
-    git:
-      repo=https://github.com/Verber/FrameworkBenchmarks.git
-      dest=/home/ubuntu/fwbench
-      force=yes
   - name: cleanup docroot
     command: rm -rf /var/www/test
     sudo: yes

@@ -1,0 +1,4 @@
+CPU	    2
+RAM	    2 GB
+Disk	SSD 40 GB
+Price	$0.08 / hr
