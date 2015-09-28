@@ -11,8 +11,45 @@
   - name: create docroot
     file: path=/var/www state=directory owner=ubuntu group=www-data mode=0775
     sudo: yes
-  - name: setup php5-fpm
-    apt: name=php5-fpm state=latest
+  - name: setup php5
+    apt:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+      - php5-cli
+      - php5-fpm
+      - php5-mysqlnd
+    sudo: yes
+  - name: setup mysql server
+    apt:
+      name: "{{ item }}"
+    with_items:
+      - python-mysqldb
+      - mysql-server
+    sudo: yes
+  - name: Start the MySQL service
+    service: name=mysql state=started enabled=true
+    sudo: yes
+  - name: create db
+    mysql_db:
+      name=hello_world
+      state=present
+  - name: import db
+    mysql_db:
+      name=hello_world
+      state=import
+      target=/home/ubuntu/fwbench/config/create.sql
+  - name: create db user
+    mysql_user:
+      name: benchmarkdbuser
+      password: benchmarkdbpass
+      priv: hello_world.*:ALL
+      state: present
+  - name: install composer
+    shell: >
+      curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin
+      cd /usr/local/bin
+      ln -s composer.phar composer
     sudo: yes
   - name: setup git
     apt: name=git state=latest
@@ -25,14 +62,35 @@
     file: path=/home/ubuntu/.composer state=directory mode=0755
   - name: add composer config for github
     copy: src=./composer/config.json dest=/home/ubuntu/.composer/config.json
+  - name: cleanup test source
+    command: rm -rf /home/ubuntu/fwbench
   - name: load test framework
-    git: repo=https://github.com/TechEmpower/FrameworkBenchmarks.git dest=/home/ubuntu/fwbench force=yes
+    git:
+      repo=https://github.com/Verber/FrameworkBenchmarks.git
+      dest=/home/ubuntu/fwbench
+      force=yes
+  - name: cleanup docroot
+    command: rm -rf /var/www/test
+    sudo: yes
   - name: setup symfony2 test into docroot
     command: mv /home/ubuntu/fwbench/frameworks/PHP/symfony2 /var/www/test
+  - name: update parameters.yml
+    replace:
+        dest=/var/www/test/app/config/parameters.yml
+        regexp='tfbdata'
+        replace='localhost'
+        backup=yes
   - name: create symfony2 cache dir
     file: path=/var/www/test/app/cache state=directory owner=ubuntu group=www-data mode=0775
+    sudo: yes
+  - name: create symfony2 clear cache dir
+    file: path=/var/www/test/app/cache/prod state=absent
+    sudo: yes
   - name: create symfony2 logs dir
     file: path=/var/www/test/app/logs state=directory owner=ubuntu group=www-data mode=0775
+    sudo: yes
+  - name: setup vendors
+    composer: command=install working_dir=/var/www/test
   - name: ensure nginx is running (and enable it at boot)
     service: name=nginx state=started enabled=yes
     sudo: yes
