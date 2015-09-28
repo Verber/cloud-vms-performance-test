@@ -281,7 +281,7 @@
               <threadCounts>true</threadCounts>
             </value>
           </objProp>
-          <stringProp name="filename">/home/ivan/workspace/cloud-performance-test/jmeter/build/rackspace/statistics.csv</stringProp>
+          <stringProp name="filename">/home/ivan/workspace/cloud-performance-test/jmeter/build/azure/requests.csv</stringProp>
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="RespTimeGraphVisualizer" testclass="ResultCollector" testname="Response Time Graph" enabled="true">
@@ -314,7 +314,7 @@
               <threadCounts>true</threadCounts>
             </value>
           </objProp>
-          <stringProp name="filename">/home/ivan/workspace/cloud-performance-test/jmeter/build/amazon-time-graph.csv</stringProp>
+          <stringProp name="filename">/home/ivan/workspace/cloud-performance-test/jmeter/build/rackspace/time-graph.csv</stringProp>
           <stringProp name="RespTimeGraph.interval">5000</stringProp>
         </ResultCollector>
         <hashTree/>
