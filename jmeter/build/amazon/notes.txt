@@ -1,5 +1,0 @@
-inst.type   t2.large
-vCPU        2
-RAM         8Gb
-Disk        EBS SSD 20Gb
-Price       $0.104 / hr

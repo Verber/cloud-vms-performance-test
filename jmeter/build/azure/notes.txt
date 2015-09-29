@@ -1,5 +1,0 @@
-inst.type   D1 Standard
-CPU         1
-RAM         3.5 Gb
-Disk        50Gb SSD
-Price       $0.093 / hr
