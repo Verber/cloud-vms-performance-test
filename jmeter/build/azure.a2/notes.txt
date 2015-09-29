@@ -1,0 +1,5 @@
+Type    A2 Standard
+CPU     2
+RAM     3.5
+Disk    HDD
+Price   $0.119 / hr (89,28 / mo)
