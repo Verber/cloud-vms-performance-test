@@ -1,2 +1,3 @@
 [webservers]
-digitalocean ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_ssh_user=root ansible_ssh_host=192.241.172.166
+amazon.t2.large ansible_ssh_private_key_file=aws-ikmosev-us-east-work.pem ansible_ssh_user=root ansible_ssh_host=54.210.28.172
+amazont.m4.medium ansible_ssh_private_key_file=aws-ikmosev-us-east-work.pem ansible_ssh_user=root ansible_ssh_host=52.23.236.194
