@@ -1,0 +1,6 @@
+Type    m4.large
+CPU     2
+ECU     6.5
+RAM     8
+Disk    EBS Only Provisioned SSD
+Price   $0.126 / hr

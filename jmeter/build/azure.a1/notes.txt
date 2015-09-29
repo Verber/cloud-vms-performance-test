@@ -1,0 +1,5 @@
+Type    A1 Standard
+CPU     1
+RAM     1.75
+Disk    HDD
+Price   $0.059 / hr (44,64 / mo)

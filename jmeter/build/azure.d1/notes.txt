@@ -1,0 +1,5 @@
+Type    D1 Standard
+CPU     1
+RAM     3.5
+Disk    50 Gb SSD
+Price   $0.093 / hr (69,94 / mo)

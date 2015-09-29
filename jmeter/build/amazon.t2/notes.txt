@@ -1,0 +1,6 @@
+Type    t2.large
+CPU     2
+ECU     Variable
+RAM     8
+Disk    EBS Only Provisioned SSD
+Price   $0.104 / hr
