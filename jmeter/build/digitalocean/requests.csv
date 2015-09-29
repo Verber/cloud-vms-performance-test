@@ -1,3 +1,4 @@
+timestamp, sampletime, label, status, response, thread, -, -, -, -, -, url, latency
 1443485202824,290,Hello json,200,OK,Benchmark 1-1,text,true,270,3,3,http://cloud.test.itcrowd/json,290
 1443485202924,267,Hello json,200,OK,Benchmark 1-2,text,true,270,4,4,http://cloud.test.itcrowd/json,267
 1443485203117,152,simple DB,200,OK,Benchmark 1-1,text,true,272,5,5,http://cloud.test.itcrowd/db,152
